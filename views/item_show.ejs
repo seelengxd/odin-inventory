@@ -8,9 +8,12 @@
   </head>
   <body>
     <%- include("header") %>
-    <h1>
-      There are <%= data.category_count %> categories and <%= data.item_count %>
-      items.
-    </h1>
+    <h2><%= item.name %></h2>
+    <p>Description: <%= item.description %></p>
+    <p>
+      <a href="<%=item.category.url%>">Category: <%=item.category.name %></a>
+    </p>
+    <p>Price: <%= Math.round(item.price * 100) / 100 %></p>
+    <p>Quantity left: <%= item.numberInStock %></p>
   </body>
 </html>

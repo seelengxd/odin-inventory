@@ -8,9 +8,12 @@
   </head>
   <body>
     <%- include("header") %>
-    <h1>
-      There are <%= data.category_count %> categories and <%= data.item_count %>
-      items.
-    </h1>
+    <div class="container">
+      <% for (const item of items) { %>
+      <div class="card">
+        <p><a href="<%= item.url %>"><%= item.name %></a></p>
+      </div>
+      <% } %>
+    </div>
   </body>
 </html>
