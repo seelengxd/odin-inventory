@@ -8,6 +8,8 @@
   </head>
   <body>
     <%- include("header") %>
+    <h1>Your Items</h1>
+    <button><a href="/items/new">Create a new Item</a></button>
     <div class="container">
       <% for (const item of items) { %>
       <div class="card">

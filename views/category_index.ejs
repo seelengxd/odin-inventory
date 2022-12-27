@@ -8,6 +8,8 @@
   </head>
   <body>
     <%- include("header") %>
+    <h1>Your categories</h1>
+    <button><a href="/categories/new">Create a new Category</a></button>
     <div class="container">
       <% for (const category of categories) { %>
       <div class="card">

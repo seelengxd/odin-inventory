@@ -2,6 +2,9 @@ body {
   padding: 0;
   margin: 0;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 a {
@@ -37,6 +40,23 @@ p {
 }
 
 .card a,
-body > p > a {
+body > p > a,
+button a {
   color: black;
+}
+
+button {
+  margin: auto;
+}
+
+form {
+  margin: auto;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 20px auto;
+}
+
+form > div {
+  margin: 10px;
 }

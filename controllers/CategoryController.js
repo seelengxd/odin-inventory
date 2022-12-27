@@ -1,5 +1,6 @@
 const Category = require("../models/category");
 const Item = require("../models/item");
+const { body, validationResult } = require("express-validator");
 
 exports.index = (req, res) => {
   Category.find({}).then((categories) => {
@@ -20,12 +21,43 @@ exports.show = (req, res, next) => {
 };
 
 exports.new = (req, res) => {
-  res.send("Not implemented - New");
+  res.render("category_form", {
+    title: "Create Category",
+    category: null,
+    errors: [],
+  });
 };
 
-exports.create = (req, res) => {
-  res.send("Not implemented - Create");
-};
+exports.create = [
+  body("name", "Name cannot be empty").trim().isLength({ min: 1 }).escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const category = new Category(req.body);
+    if (!errors.isEmpty()) {
+      res.render("category_form", {
+        title: "Create Category",
+        category,
+        errors: errors.array(),
+      });
+      return;
+    }
+    Category.findOne({ name: req.body.name }).exec((err, found_category) => {
+      if (err) {
+        return next(err);
+      }
+      if (found_category) {
+        res.redirect(found_category.url);
+        return;
+      }
+      category.save((err) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect(category.url);
+      });
+    });
+  },
+];
 
 exports.edit = (req, res) => {
   res.send(`Not implemented - Edit ${req.params.id}`);

@@ -1,0 +1,68 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <title>Odin Inventory</title>
+  </head>
+  <body>
+    <%- include("header") %>
+    <h1><%= title %></h1>
+    <form action="/items" method="POST">
+      <div>
+        <label for="name">Name: </label
+        ><input
+          type="text"
+          name="name"
+          value="<%= item ? item.name : ''%>"
+          id="name"
+        />
+      </div>
+      <div>
+        <label for="description">Description: </label
+        ><input
+          type="text"
+          name="description"
+          value="<%= item ? item.description : ''%>"
+          id="description"
+        />
+      </div>
+      <div>
+        <label for="category">Category:</label
+        ><select name="category" id="category">
+          <% for (const category of categories) { %>
+          <option value="<%= category._id %>"><%= category.name %></option>
+          <% } %>
+        </select>
+      </div>
+      <div>
+        <label for="price">Price:</label
+        ><input
+          type="number"
+          step=".01"
+          name="price"
+          value="<%= item ? item.price : 0 %>"
+        />
+      </div>
+      <div>
+        <label for="numberInStock">Number in stock:</label
+        ><input
+          type="number"
+          name="numberInStock"
+          value="<%= item ? item.numberInStock : 0 %>"
+        />
+      </div>
+      <div>
+        <input type="submit" />
+      </div>
+      <% if (errors) { %>
+      <ul>
+        <% for (const error of errors) { %>
+        <li><%= error.msg %></li>
+        <% } %>
+      </ul>
+      <% } %>
+    </form>
+  </body>
+</html>
