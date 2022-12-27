@@ -82,6 +82,11 @@ exports.update = (req, res) => {
   res.send(`Not implemented - Update ${req.params.id}`);
 };
 
-exports.destroy = (req, res) => {
-  res.send(`Not implemented - Destroy ${req.params.id}`);
+exports.destroy = (req, res, next) => {
+  Item.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/items");
+  });
 };

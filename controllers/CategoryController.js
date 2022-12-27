@@ -1,5 +1,6 @@
 const Category = require("../models/category");
 const Item = require("../models/item");
+const async = require("async");
 const { body, validationResult } = require("express-validator");
 
 exports.index = (req, res) => {
@@ -68,5 +69,16 @@ exports.update = (req, res) => {
 };
 
 exports.destroy = (req, res) => {
-  res.send(`Not implemented - Destroy ${req.params.id}`);
+  async.parallel(
+    [
+      (callback) => Item.deleteMany({ category: req.params.id }, callback),
+      (callback) => Category.findByIdAndRemove(req.params.id, callback),
+    ],
+    (err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect("/categories");
+    }
+  );
 };
