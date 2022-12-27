@@ -16,6 +16,7 @@
     </p>
     <p>Price: <%= Math.round(item.price * 100) / 100 %></p>
     <p>Quantity left: <%= item.numberInStock %></p>
-    <button onClick="deleteItem('<%= item.id %>')">Delete</button>
+    <button><a href="/items/<%= item.id %>/edit">Edit</a></button>
+    <button onClick="deleteItem('<%= item.id %>')">Delete</button
   </body>
 </html>

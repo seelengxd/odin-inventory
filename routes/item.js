@@ -13,7 +13,7 @@ router.post("/", ItemController.create);
 
 router.get("/:id/edit", ItemController.edit);
 
-router.put("/:id", ItemController.update);
+router.post("/:id", ItemController.update);
 
 router.delete("/:id", ItemController.destroy);
 

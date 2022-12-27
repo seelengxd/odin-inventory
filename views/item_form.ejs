@@ -9,7 +9,7 @@
   <body>
     <%- include("header") %>
     <h1><%= title %></h1>
-    <form action="/items" method="POST">
+    <form action="<%= action %>" method="POST">
       <div>
         <label for="name">Name: </label
         ><input
@@ -31,8 +31,11 @@
       <div>
         <label for="category">Category:</label
         ><select name="category" id="category">
-          <% for (const category of categories) { %>
-          <option value="<%= category._id %>"><%= category.name %></option>
+          <% for (const category of categories) { %> <% const selected = (item
+          && (item.category._id.equals(category._id))) ? "selected" : ""; %>
+          <option value="<%= category._id %>" <%= selected %>
+            ><%= category.name %>
+          </option>
           <% } %>
         </select>
       </div>

@@ -7,13 +7,13 @@ router.get("/", CategoryController.index);
 
 router.get("/new", CategoryController.new);
 
+router.get("/:id/edit", CategoryController.edit);
+
 router.get("/:id", CategoryController.show);
 
 router.post("/", CategoryController.create);
 
-router.get("/:id/edit", CategoryController.edit);
-
-router.put("/:id", CategoryController.update);
+router.post("/:id", CategoryController.update);
 
 router.delete("/:id", CategoryController.destroy);
 

@@ -3,6 +3,10 @@ const Item = require("../models/item");
 const async = require("async");
 const { body, validationResult } = require("express-validator");
 
+const categoryValidation = [
+  body("name", "Name cannot be empty").trim().isLength({ min: 1 }).escape(),
+];
+
 exports.index = (req, res) => {
   Category.find({}).then((categories) => {
     res.render("category_index", { categories });
@@ -26,11 +30,12 @@ exports.new = (req, res) => {
     title: "Create Category",
     category: null,
     errors: [],
+    action: "/categories",
   });
 };
 
 exports.create = [
-  body("name", "Name cannot be empty").trim().isLength({ min: 1 }).escape(),
+  categoryValidation,
   (req, res, next) => {
     const errors = validationResult(req);
     const category = new Category(req.body);
@@ -39,6 +44,7 @@ exports.create = [
         title: "Create Category",
         category,
         errors: errors.array(),
+        action: "/categories",
       });
       return;
     }
@@ -61,12 +67,52 @@ exports.create = [
 ];
 
 exports.edit = (req, res) => {
-  res.send(`Not implemented - Edit ${req.params.id}`);
+  Category.findById(req.params.id, (err, category) => {
+    if (err) {
+      return next(err);
+    }
+    res.render("category_form", {
+      title: "Edit Category",
+      category: category,
+      errors: [],
+      action: `/categories/${category.id}`,
+    });
+  });
 };
 
-exports.update = (req, res) => {
-  res.send(`Not implemented - Update ${req.params.id}`);
-};
+exports.update = [
+  categoryValidation,
+  (req, res) => {
+    const errors = validationResult(req);
+    const category = new Category({ ...req.body, _id: req.params.id });
+    if (!errors.isEmpty()) {
+      res.render("category_form", {
+        title: "Edit Category",
+        category: category,
+        errors: errors.array(),
+        action: `/categories/${category._id}`,
+      });
+      return;
+    }
+
+    Category.findOne({ name: req.body.name }, (err, found_category) => {
+      if (err) {
+        return next(err);
+      }
+      if (found_category && found_category._id !== req.params.id) {
+        res.redirect(found_category.url);
+        return;
+      }
+
+      Category.findByIdAndUpdate(req.params.id, req.body, (err, category) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect(category.url);
+      });
+    });
+  },
+];
 
 exports.destroy = (req, res) => {
   async.parallel(
