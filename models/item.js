@@ -7,6 +7,7 @@ const ItemSchema = new Schema({
   category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
   price: { type: Number, min: 0, required: true },
   numberInStock: { type: Number, default: 0 },
+  src: { type: String }
 });
 
 ItemSchema.virtual("url").get(function () {

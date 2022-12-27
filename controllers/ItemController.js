@@ -2,8 +2,11 @@ const Item = require("../models/item");
 const Category = require("../models/category");
 const async = require("async");
 const { body, validationResult } = require("express-validator");
+const multer = require("multer");
+const upload = multer({dest: './public/data/uploads/'})
 
 const itemValidation = [
+  upload.single('image'),
   body("name", "Name cannot be empty").trim().isLength({ min: 1 }).escape(),
   body("category")
     .isMongoId()
@@ -55,7 +58,7 @@ exports.create = [
   itemValidation,
   (req, res, next) => {
     const errors = validationResult(req);
-    const item = new Item(req.body);
+    const item = new Item({...req.body, ...(req.file ? {src: req.file.path} : {})});
     if (!errors.isEmpty()) {
       Category.find((err, categories) => {
         if (err) {
@@ -108,7 +111,8 @@ exports.update = [
   itemValidation,
   (req, res, next) => {
     const errors = validationResult(req);
-    const item = new Item({ ...req.body, _id: req.params.id });
+    const updateObject = {...req.body, ...(req.file ? {src: req.file.path} : {})}
+    const item = new Item(updateObject);
 
     if (!errors.isEmpty()) {
       Category.find({}, (err, categories) => {
@@ -137,7 +141,7 @@ exports.update = [
           return;
         }
 
-        Item.findByIdAndUpdate(req.params.id, req.body, (err, item) => {
+        Item.findByIdAndUpdate(req.params.id, updateObject, (err, item) => {
           if (err) {
             return next(err);
           }

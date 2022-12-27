@@ -11,8 +11,11 @@
     <%- include("header") %>
     <h2><%= item.name %></h2>
     <p>Description: <%= item.description %></p>
+    <% if (item.src) { %>
+      <img src="<%= item.src.slice(6) %>" alt="<%= item.name %>" />
+    <% } %>
     <p>
-      <a href="<%=item.category.url%>">Category: <%=item.category.name %></a>
+      <a href="<%= item.category.url %>">Category: <%= item.category.name %></a>
     </p>
     <p>Price: <%= Math.round(item.price * 100) / 100 %></p>
     <p>Quantity left: <%= item.numberInStock %></p>
